@@ -7,6 +7,9 @@ CORS(app)
 
 @app.route('/queen', methods=['POST'])
 def put_queen():
+    x = request.args.get('x')
+    y = request.args.get('y')
+    
     return jsonify(message="")
 
 
