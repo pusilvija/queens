@@ -27,46 +27,60 @@ class Grid:
         ])
         self.grid[COLOR_STR] = colors
 
+    def resetGrid(self):
+        self.grid[QUEEN_STR] = 0
+
     def putQueen(self, x, y):
         self.grid[x, y][QUEEN_STR] = 1
-        self._validateGrid(x, y)
+        validation_message = self._validateGrid(x, y)
+        return validation_message
 
     def removeQueen(self, x, y):
         self.grid[x, y][QUEEN_STR] = 0
-        self._validateGrid(x, y)
+        validation_message = self._validateGrid(x, y)
+        return validation_message
 
     def _validateGrid(self, x, y):
-        self._validateColor()
-        self._validateCol()
-        self._validateRow()
-        self._validateNeighbors(x, y)
+        messages = []
+
+        if not self._validateColor():
+            messages.append("Multiple queens of the same color.")
+        if not self._validateCol():
+            messages.append("Multiple queens in the same column.")
+        if not self._validateRow():
+            messages.append("Multiple queens in the same row.")
+        if not self._validateNeighbors(x, y):
+            messages.append(f"Multiple queens in the neighborhood of ({x}, {y}).")
+
+        if messages:
+            messages.insert(0, "Grid validation failed: ")
+            return " | ".join(messages)
+        else:
+            return "Validation successfu!" if not messages else "\n".join(messages)
+
         
     def _validateColor(self):
         distinct_colors = np.unique(self.grid[COLOR_STR])
         for color in distinct_colors:
             if np.sum(self.grid[self.grid[COLOR_STR] == color][QUEEN_STR]) > 1:
-                print(f"Invalid grid: Multiple queens of color {color} found.")
                 return False
         return True
     
     def _validateCol(self):
-        col = self.grid[:, 0]
+        col = self.grid[0, :]
         if col[QUEEN_STR].sum() > 1:
-            print("Invalid grid: Multiple queens in the same column.")
             return False
         return True
 
     def _validateRow(self):
-        row = self.grid[0, :]
+        row = self.grid[:, 0]
         if row[QUEEN_STR].sum() > 1:
-            print("Invalid grid: Multiple queens in the same row.")
             return False
         return True
     
     def _validateNeighbors(self, x, y):
         neighbors_coords = np.array(self._getNeighborsCoords(x, y))
         if self.grid[neighbors_coords[:, 0], neighbors_coords[:, 1]][QUEEN_STR].sum() > 1:
-            print(f"Invalid grid: Multiple queens in the same neighborhood.")
             return False
         return True
 
@@ -85,13 +99,3 @@ class Grid:
     
     def printGrid(self):
         print(self.grid)
-
-
-if __name__ == '__main__':
-    grid = Grid()
-    grid.putQueen(0, 0)
-    grid.putQueen(1, 1)
-    grid.removeQueen(1, 1)
-    # grid.putQueen(1, 1)
-
-    grid.printGrid()
