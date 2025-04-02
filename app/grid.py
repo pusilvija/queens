@@ -65,7 +65,7 @@ class Grid:
     
     def _validateNeighbors(self, x, y):
         neighbors_coords = np.array(self._getNeighborsCoords(x, y))
-        if self.grid[neighbors_coords[:, 0], neighbors_coords[:, 1]][QUEEN_STR].sum() >= 1:
+        if self.grid[neighbors_coords[:, 0], neighbors_coords[:, 1]][QUEEN_STR].sum() > 1:
             print(f"Invalid grid: Multiple queens in the same neighborhood.")
             return False
         return True
@@ -74,7 +74,7 @@ class Grid:
         """Get the neighbors of a specific coordinate (x, y) in the grid."""
         directions = [
             (-1, -1), (-1, 0), (-1, 1),
-            (0, -1),           (0, 1),
+            (0, -1),  (0, 0),  (0, 1),
             (1, -1),  (1, 0),  (1, 1)
         ]
         return [
@@ -90,8 +90,8 @@ class Grid:
 if __name__ == '__main__':
     grid = Grid()
     grid.putQueen(0, 0)
-    grid.putQueen(0, 1)
-    grid.putQueen(1, 0)
     grid.putQueen(1, 1)
+    grid.removeQueen(1, 1)
+    # grid.putQueen(1, 1)
 
     grid.printGrid()
