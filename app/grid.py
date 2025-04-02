@@ -57,8 +57,8 @@ class Grid:
         return True
 
     def _validateRow(self):
-        col = self.grid[0, :]
-        if col[QUEEN_STR].sum() > 1:
+        row = self.grid[0, :]
+        if row[QUEEN_STR].sum() > 1:
             print("Invalid grid: Multiple queens in the same row.")
             return False
         return True
