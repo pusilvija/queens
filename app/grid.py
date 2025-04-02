@@ -29,6 +29,7 @@ class Grid:
 
     def resetGrid(self):
         self.grid[QUEEN_STR] = 0
+        return "Grid reset successfully!"
 
     def putQueen(self, x, y):
         self.grid[x, y][QUEEN_STR] = 1
@@ -55,9 +56,10 @@ class Grid:
         if messages:
             messages.insert(0, "Grid validation failed: ")
             return " | ".join(messages)
+        elif self.grid[QUEEN_STR].sum() == 4:
+            return "Victory"
         else:
-            return "Validation successfu!" if not messages else "\n".join(messages)
-
+            return "Validation successfu!"
         
     def _validateColor(self):
         distinct_colors = np.unique(self.grid[COLOR_STR])

@@ -37,7 +37,7 @@ def put_queen():
         return jsonify(message=error), 400
 
     message = grid.putQueen(x, y)
-    return jsonify(message=f"message: {message}"), 200
+    return jsonify(message=message), 200
 
 
 @app.route('/remove-queen', methods=['POST'])
@@ -47,8 +47,12 @@ def remove_queen():
         return jsonify(message=error), 400
 
     message = grid.removeQueen(x, y)
-    return jsonify(message=f"message: {message}"), 200
+    return jsonify(message=message), 200
 
+@app.route('/reset-grid', methods=['POST'])
+def reset_grid():
+    message = grid.resetGrid()
+    return jsonify(message=message), 200
 
 if __name__ == '__main__':
     app.run(host='localhost', port=5174)

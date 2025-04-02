@@ -1,3 +1,3 @@
 How to start application:
- flask run -p 3000
+flask --app app/routes.py run --host=localhost --port=5174
 "-p" for port
