@@ -3,3 +3,4 @@ chat.txt
 venv
 
 __pycache__
+*.egg-info/

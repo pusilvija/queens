@@ -1,7 +1,7 @@
 import numpy as np
 
-from grid_validation import validate_grid
-from constants import QUEEN_STR, COLOR_STR
+from app.grid_validation import validate_grid
+from app.constants import QUEEN_STR, COLOR_STR
 
 
 class Grid:

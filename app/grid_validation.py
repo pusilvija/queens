@@ -1,6 +1,6 @@
 import numpy as np
 
-from constants import QUEEN_STR, COLOR_STR
+from app.constants import QUEEN_STR, COLOR_STR
 
 
 def validate_grid(grid, x, y):
