@@ -1,11 +1,7 @@
 import numpy as np
 
-
-COLOR_STR = 'color'
-QUEEN_STR = 'queen'
-
-COLOR_INDEX = 0
-QUEEN_INDEX = 1
+from grid_validation import validate_grid
+from app.constants import QUEEN_STR, COLOR_STR
 
 
 class Grid:
@@ -33,71 +29,23 @@ class Grid:
 
     def putQueen(self, x, y):
         self.grid[x, y][QUEEN_STR] = 1
-        validation_message = self._validateGrid(x, y)
+        validation_message = validate_grid(self.grid, x, y)
         return validation_message
 
     def removeQueen(self, x, y):
         self.grid[x, y][QUEEN_STR] = 0
-        validation_message = self._validateGrid(x, y)
+        validation_message = validate_grid(self.grid, x, y)
         return validation_message
-
-    def _validateGrid(self, x, y):
-        messages = []
-
-        if not self._validateColor():
-            messages.append("Multiple queens of the same color.")
-        if not self._validateCol():
-            messages.append("Multiple queens in the same column.")
-        if not self._validateRow():
-            messages.append("Multiple queens in the same row.")
-        if not self._validateNeighbors(x, y):
-            messages.append(f"Multiple queens in the neighborhood of ({x}, {y}).")
-
-        if messages:
-            messages.insert(0, "Grid validation failed: ")
-            return " | ".join(messages)
-        elif self.grid[QUEEN_STR].sum() == 4:
-            return "Victory"
-        else:
-            return "Validation successfu!"
-        
-    def _validateColor(self):
-        distinct_colors = np.unique(self.grid[COLOR_STR])
-        for color in distinct_colors:
-            if np.sum(self.grid[self.grid[COLOR_STR] == color][QUEEN_STR]) > 1:
-                return False
-        return True
-    
-    def _validateCol(self):
-        col = self.grid[0, :]
-        if col[QUEEN_STR].sum() > 1:
-            return False
-        return True
-
-    def _validateRow(self):
-        row = self.grid[:, 0]
-        if row[QUEEN_STR].sum() > 1:
-            return False
-        return True
-    
-    def _validateNeighbors(self, x, y):
-        neighbors_coords = np.array(self._getNeighborsCoords(x, y))
-        if self.grid[neighbors_coords[:, 0], neighbors_coords[:, 1]][QUEEN_STR].sum() > 1:
-            return False
-        return True
-
-    def _getNeighborsCoords(self, x, y):
-        """Get the neighbors of a specific coordinate (x, y) in the grid."""
-        directions = [
-            (-1, -1), (-1, 0), (-1, 1),
-            (0, -1),  (0, 0),  (0, 1),
-            (1, -1),  (1, 0),  (1, 1)
-        ]
-        return [
-            (x + dx, y + dy)
-            for dx, dy in directions
-            if 0 <= x + dx < self.GRID_SIZE and 0 <= y + dy < self.GRID_SIZE
-        ]
     
     def printGrid(self):
         print(self.grid)
+
+
+if __name__ == '__main__':
+    grid = Grid()
+    grid.printGrid()
+    print(grid.putQueen(0, 0))
+    grid.printGrid()
+    print(grid.putQueen(0, 1))
+    grid.printGrid()
+
