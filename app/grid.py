@@ -1,103 +1,75 @@
 import numpy as np
 
+from grid_validation import validate_grid
+from grid_generation import generate_grid_colors, update_grid_with_queens
 
-COLOR_STR = 'color'
-QUEEN_STR = 'queen'
-
-COLOR_INDEX = 0
-QUEEN_INDEX = 1
+from constants import QUEEN_STR, COLOR_STR
 
 
 class Grid:
-    GRID_SIZE = 4
+    GRID_SIZE = None
 
-    def __init__(self):
-        self.grid = np.zeros((self.GRID_SIZE, self.GRID_SIZE), dtype=[(COLOR_STR, 'U1'), (QUEEN_STR, 'i1')])
-            # 'U1' (a Unicode string of length 1).
-            # 'i1' (a signed 8-bit integer).
+    def __init__(self, size):
+        self.GRID_SIZE = size
+        self.grid = np.zeros((self.GRID_SIZE, self.GRID_SIZE), dtype=[(COLOR_STR, 'i1'), (QUEEN_STR, 'i1')])
+        self._generate_grid()
 
-        self.setCustomGrid()
+    # def set_custom_grid(self):
+    #     colors = np.array([
+    #         ['R', 'R', 'R', 'G'],
+    #         ['R', 'Y', 'Y', 'G'],
+    #         ['Y', 'Y', 'Y', 'B'],
+    #         ['B', 'B', 'B', 'B']
+    #     ])
+    #     self.grid[COLOR_STR] = colors
 
-    def setCustomGrid(self):
-        colors = np.array([
-            ['R', 'R', 'R', 'G'],
-            ['R', 'Y', 'Y', 'G'],
-            ['Y', 'Y', 'Y', 'B'],
-            ['B', 'B', 'B', 'B']
-        ])
-        self.grid[COLOR_STR] = colors
-
-    def resetGrid(self):
+    def reset_queens(self):
         self.grid[QUEEN_STR] = 0
         return "Grid reset successfully!"
 
-    def putQueen(self, x, y):
+    def put_queen(self, x, y):
         self.grid[x, y][QUEEN_STR] = 1
-        validation_message = self._validateGrid(x, y)
+        validation_message = validate_grid(self.grid, x, y)
         return validation_message
 
-    def removeQueen(self, x, y):
+    def remove_queen(self, x, y):
         self.grid[x, y][QUEEN_STR] = 0
-        validation_message = self._validateGrid(x, y)
+        validation_message = validate_grid(self.grid, x, y)
         return validation_message
-
-    def _validateGrid(self, x, y):
-        messages = []
-
-        if not self._validateColor():
-            messages.append("Multiple queens of the same color.")
-        if not self._validateCol():
-            messages.append("Multiple queens in the same column.")
-        if not self._validateRow():
-            messages.append("Multiple queens in the same row.")
-        if not self._validateNeighbors(x, y):
-            messages.append(f"Multiple queens in the neighborhood of ({x}, {y}).")
-
-        if messages:
-            messages.insert(0, "Grid validation failed: ")
-            return " | ".join(messages)
-        elif self.grid[QUEEN_STR].sum() == 4:
-            return "Victory"
-        else:
-            return "Validation successfu!"
-        
-    def _validateColor(self):
-        distinct_colors = np.unique(self.grid[COLOR_STR])
-        for color in distinct_colors:
-            if np.sum(self.grid[self.grid[COLOR_STR] == color][QUEEN_STR]) > 1:
-                return False
-        return True
     
-    def _validateCol(self):
-        col = self.grid[0, :]
-        if col[QUEEN_STR].sum() > 1:
-            return False
-        return True
+    def _generate_grid(self):
+        self.grid = update_grid_with_queens(self.grid)
+        while True:
+            try:
+                self.grid[COLOR_STR] = generate_grid_colors(self)
+                break
+            except Exception as e:
+                self._reset_colors()
+        self.reset_queens()
 
-    def _validateRow(self):
-        row = self.grid[:, 0]
-        if row[QUEEN_STR].sum() > 1:
-            return False
-        return True
+    def _reset_colors(self):
+        self.grid[COLOR_STR] = 0
     
-    def _validateNeighbors(self, x, y):
-        neighbors_coords = np.array(self._getNeighborsCoords(x, y))
-        if self.grid[neighbors_coords[:, 0], neighbors_coords[:, 1]][QUEEN_STR].sum() > 1:
-            return False
-        return True
-
-    def _getNeighborsCoords(self, x, y):
-        """Get the neighbors of a specific coordinate (x, y) in the grid."""
-        directions = [
-            (-1, -1), (-1, 0), (-1, 1),
-            (0, -1),  (0, 0),  (0, 1),
-            (1, -1),  (1, 0),  (1, 1)
-        ]
-        return [
-            (x + dx, y + dy)
-            for dx, dy in directions
-            if 0 <= x + dx < self.GRID_SIZE and 0 <= y + dy < self.GRID_SIZE
-        ]
-    
-    def printGrid(self):
+    def print_grid(self):
         print(self.grid)
+
+    def get_grid_json(self):
+        grid_json = {
+            "grid": [
+            {
+                "x": x,
+                "y": y,
+                "color": int(self.grid[x, y][COLOR_STR]),
+            }
+            for x in range(self.GRID_SIZE)
+            for y in range(self.GRID_SIZE)
+            ],
+            "size": self.GRID_SIZE
+        }
+        return grid_json
+
+if __name__ == '__main__':
+    grid = Grid(4)
+    grid.print_grid()
+    print(grid.get_grid_json())
+
