@@ -8,6 +8,7 @@ def parse_requirements(filename):
 setup(
     name="queens",
     version="1.0.0",
-    packages=find_packages(),
+    packages=find_packages(where="app"),
+    package_dir={"": "app"},
     install_requires=parse_requirements("requirements.txt"),
 )
