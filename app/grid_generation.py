@@ -168,11 +168,11 @@ def get_random_neighbor_coords(grid, x, y):
     same_color_neighbors = [
         (xc, yc) for xc, yc in all_neighbors if grid.grid[COLOR_STR][xc, yc] == grid.grid[COLOR_STR][x, y]
     ]
-    if len(available_neighbors) == 0 and np.sum(grid.grid[COLOR_STR] != 0) != grid_size ** 2:
+    if len(available_neighbors) == 0:
         x_next, y_next = same_color_neighbors[np.random.randint(0, len(same_color_neighbors))]
         return get_random_neighbor_coords(grid, x_next, y_next)
     else:
-        return available_neighbors[np.random.randint(0, len(available_neighbors))] or None
+        return available_neighbors[np.random.randint(0, len(available_neighbors))]
 
 def is_queen(grid, x, y):
     return grid[x, y][QUEEN_STR] == 1
