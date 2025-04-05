@@ -48,7 +48,6 @@ def remove_queen():
         return jsonify(message=error), 400
 
     message = grid.remove_queen(x, y)
-    message = grid.remove_queen(x, y)
     return jsonify(message=message), 200
 
 @app.route('/reset-grid', methods=['POST'])
