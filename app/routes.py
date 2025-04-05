@@ -37,7 +37,6 @@ def put_queen():
         return jsonify(message=error), 400
 
     message = grid.put_queen(x, y)
-    message = grid.put_queen(x, y)
     grid.print_grid()
     return jsonify(message=message), 200
 
