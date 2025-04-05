@@ -1,4 +1,3 @@
-import pdb
 import numpy as np
 
 from constants import COLOR_STR, QUEEN_STR
