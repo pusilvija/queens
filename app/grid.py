@@ -59,7 +59,7 @@ class Grid:
             {
                 "x": x,
                 "y": y,
-                "color": int(self.grid[x, y][COLOR_STR]),
+                "square_color": int(self.grid[x, y][COLOR_STR]),
             }
             for x in range(self.GRID_SIZE)
             for y in range(self.GRID_SIZE)
@@ -67,9 +67,4 @@ class Grid:
             "size": self.GRID_SIZE
         }
         return grid_json
-
-if __name__ == '__main__':
-    grid = Grid(4)
-    grid.print_grid()
-    print(grid.get_grid_json())
 

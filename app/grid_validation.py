@@ -18,7 +18,7 @@ def validate_grid(grid, x, y):
     if messages:
         messages.insert(0, "Grid validation failed: ")
         return " | ".join(messages)
-    elif grid[QUEEN_STR].sum() == 4:
+    elif grid[QUEEN_STR].sum() == grid.shape[0]:
         return "Victory"
     else:
         return "Validation successful!"

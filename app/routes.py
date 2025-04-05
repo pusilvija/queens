@@ -50,17 +50,20 @@ def remove_queen():
     message = grid.remove_queen(x, y)
     return jsonify(message=message), 200
 
+
 @app.route('/reset-grid', methods=['POST'])
 def reset_grid():
     message = grid.reset_queens()
     return jsonify(message=message), 200
+
 
 @app.route('/create-grid', methods=['GET'])
 def create_grid():
     size = request.args.get('size', default=8, type=int)
     global grid
     grid = Grid(size)
-    grid.print_grid()
-    return jsonify(message=f"Grid generated with size of {size}"), 200
+    return grid.get_grid_json(), 200
+
+
 if __name__ == '__main__':
     app.run(host='localhost', port=5174)
