@@ -11,10 +11,8 @@ class Grid:
 
     def __init__(self, size):
         self.GRID_SIZE = size
-        self.grid = np.zeros((self.GRID_SIZE, self.GRID_SIZE), dtype=[(COLOR_STR, 'U1'), (QUEEN_STR, 'i1')])
-            # 'U1' (a Unicode string of length 1).
-            # 'i1' (a signed 8-bit integer).
-        self._generate_colors()
+        self.grid = np.zeros((self.GRID_SIZE, self.GRID_SIZE), dtype=[(COLOR_STR, 'i1'), (QUEEN_STR, 'i1')])
+        self._generate_grid()
 
     # def set_custom_grid(self):
     #     colors = np.array([
@@ -24,18 +22,6 @@ class Grid:
     #         ['B', 'B', 'B', 'B']
     #     ])
     #     self.grid[COLOR_STR] = colors
-
-    # def set_custom_queens(self):
-    #     queens = np.array([
-    #         [0, 1, 0, 0],
-    #         [0, 0, 0, 1],
-    #         [1, 0, 0, 0],
-    #         [0, 0, 1, 0]
-    #     ])
-    #     self.grid[QUEEN_STR] = queens
-
-    def _generate_queens(self):
-        self.grid = update_grid_with_queens(self.grid)
 
     def reset_queens(self):
         self.grid[QUEEN_STR] = 0
@@ -51,8 +37,8 @@ class Grid:
         validation_message = validate_grid(self.grid, x, y)
         return validation_message
     
-    def _generate_colors(self):
-        self._generate_queens()
+    def _generate_grid(self):
+        self.grid = update_grid_with_queens(self.grid)
         while True:
             try:
                 self.grid[COLOR_STR] = generate_grid_colors(self)
@@ -62,7 +48,7 @@ class Grid:
         self.reset_queens()
 
     def _reset_colors(self):
-        self.grid[COLOR_STR] = ''
+        self.grid[COLOR_STR] = 0
     
     def print_grid(self):
         print(self.grid)
@@ -73,7 +59,7 @@ class Grid:
             {
                 "x": x,
                 "y": y,
-                "color": str(self.grid[x, y][COLOR_STR]),
+                "color": int(self.grid[x, y][COLOR_STR]),
             }
             for x in range(self.GRID_SIZE)
             for y in range(self.GRID_SIZE)
