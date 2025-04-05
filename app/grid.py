@@ -1,7 +1,8 @@
 import numpy as np
 
 from grid_validation import validate_grid
-from grid_generation import generate_grid_colors
+from grid_generation import generate_grid_colors, update_grid_with_queens
+
 from constants import QUEEN_STR, COLOR_STR
 
 
@@ -13,6 +14,8 @@ class Grid:
         self.grid = np.zeros((self.GRID_SIZE, self.GRID_SIZE), dtype=[(COLOR_STR, 'U1'), (QUEEN_STR, 'i1')])
             # 'U1' (a Unicode string of length 1).
             # 'i1' (a signed 8-bit integer).
+        self._generate_queens()
+        self._generate_colors()
 
         # self.setCustomGrid()
 
@@ -33,6 +36,9 @@ class Grid:
             [0, 0, 1, 0]
         ])
         self.grid[QUEEN_STR] = queens
+
+    def _generate_queens(self):
+        self.grid = update_grid_with_queens(self.grid)
 
     def reset_queens(self):
         self.grid[QUEEN_STR] = 0
@@ -65,8 +71,5 @@ class Grid:
 
 if __name__ == '__main__':
     grid = Grid(4)
-    grid.set_custom_queens()
-    grid.print_grid()
-    grid._generate_colors()
     grid.print_grid()
 
