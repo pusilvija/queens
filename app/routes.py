@@ -61,7 +61,6 @@ def create_grid():
     global grid
     grid = Grid(size)
     grid.print_grid()
-    jsonify(message=f"Grid generated with size of {size}"), 200
-
+    return jsonify(message=f"Grid generated with size of {size}"), 200
 if __name__ == '__main__':
     app.run(host='localhost', port=5174)
