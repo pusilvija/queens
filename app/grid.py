@@ -5,7 +5,7 @@ from constants import QUEEN_STR, COLOR_STR
 
 
 class Grid:
-    GRID_SIZE = 4
+    GRID_SIZE = 5
 
     def __init__(self):
         self.grid = np.zeros((self.GRID_SIZE, self.GRID_SIZE), dtype=[(COLOR_STR, 'U1'), (QUEEN_STR, 'i1')])
@@ -16,10 +16,11 @@ class Grid:
 
     def set_custom_grid(self):
         colors = np.array([
-            ['R', 'R', 'R', 'G'],
-            ['R', 'Y', 'Y', 'G'],
-            ['Y', 'Y', 'Y', 'B'],
-            ['B', 'B', 'B', 'B']
+            ['R', 'R', 'R', 'G', 'G'],
+            ['R', 'Y', 'Y', 'G', 'G'],
+            ['Y', 'Y', 'Y', 'B', 'G'],
+            ['B', 'B', 'B', 'B', 'G'],
+            ['B', 'B', 'B', 'B', 'G']
         ])
         self.grid[COLOR_STR] = colors
 
