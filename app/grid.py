@@ -67,8 +67,23 @@ class Grid:
     def print_grid(self):
         print(self.grid)
 
+    def get_grid_json(self):
+        grid_json = {
+            "grid": [
+            {
+                "x": x,
+                "y": y,
+                "color": str(self.grid[x, y][COLOR_STR]),
+            }
+            for x in range(self.GRID_SIZE)
+            for y in range(self.GRID_SIZE)
+            ],
+            "size": self.GRID_SIZE
+        }
+        return grid_json
 
 if __name__ == '__main__':
     grid = Grid(4)
     grid.print_grid()
+    print(grid.get_grid_json())
 
