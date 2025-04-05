@@ -1,20 +1,22 @@
 import numpy as np
 
 from grid_validation import validate_grid
+from grid_generation import generate_grid_colors
 from constants import QUEEN_STR, COLOR_STR
 
 
 class Grid:
     GRID_SIZE = 4
 
-    def __init__(self):
+    def __init__(self, size):
+        self.GRID_SIZE = size
         self.grid = np.zeros((self.GRID_SIZE, self.GRID_SIZE), dtype=[(COLOR_STR, 'U1'), (QUEEN_STR, 'i1')])
             # 'U1' (a Unicode string of length 1).
             # 'i1' (a signed 8-bit integer).
 
-        self.setCustomGrid()
+        # self.setCustomGrid()
 
-    def setCustomGrid(self):
+    def set_custom_grid(self):
         colors = np.array([
             ['R', 'R', 'R', 'G'],
             ['R', 'Y', 'Y', 'G'],
@@ -23,29 +25,48 @@ class Grid:
         ])
         self.grid[COLOR_STR] = colors
 
-    def resetGrid(self):
+    def set_custom_queens(self):
+        queens = np.array([
+            [0, 1, 0, 0],
+            [0, 0, 0, 1],
+            [1, 0, 0, 0],
+            [0, 0, 1, 0]
+        ])
+        self.grid[QUEEN_STR] = queens
+
+    def reset_queens(self):
         self.grid[QUEEN_STR] = 0
         return "Grid reset successfully!"
 
-    def putQueen(self, x, y):
+    def put_queen(self, x, y):
         self.grid[x, y][QUEEN_STR] = 1
         validation_message = validate_grid(self.grid, x, y)
         return validation_message
 
-    def removeQueen(self, x, y):
+    def remove_queen(self, x, y):
         self.grid[x, y][QUEEN_STR] = 0
         validation_message = validate_grid(self.grid, x, y)
         return validation_message
     
-    def printGrid(self):
+    def _generate_colors(self):
+        while True:
+            try:
+                self.grid[COLOR_STR] = generate_grid_colors(self)
+                break
+            except Exception as e:
+                self._reset_colors()
+
+    def _reset_colors(self):
+        self.grid[COLOR_STR] = ''
+    
+    def print_grid(self):
         print(self.grid)
 
 
 if __name__ == '__main__':
-    grid = Grid()
-    grid.printGrid()
-    print(grid.putQueen(0, 0))
-    grid.printGrid()
-    print(grid.putQueen(0, 1))
-    grid.printGrid()
+    grid = Grid(4)
+    grid.set_custom_queens()
+    grid.print_grid()
+    grid._generate_colors()
+    grid.print_grid()
 
