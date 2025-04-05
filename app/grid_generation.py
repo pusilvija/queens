@@ -1,23 +1,15 @@
 import pdb
 import numpy as np
 
+from app.grid import Grid
 from constants import COLOR_STR, QUEEN_STR
 
 
-def generate_grid(size):
-    empty_grid = np.zeros((size, size), dtype=[(COLOR_STR, 'U1'), (QUEEN_STR, 'i1')])
-    queen_dict = {i: 0 for i in range(size*size)}
-    available_queen_index = np.arange(0, size*size)
-    grid_with_queens = place_queens(empty_grid, available_queen_index, queen_dict, size)
-    return grid_with_queens
+def update_grid_with_queens(grid):
+    size = grid.shape[0]
 
-
-def place_queens(grid, available_queen_index, queen_dict, size):
     while True:
-        # reset
-        grid[QUEEN_STR] = 0
-        queen_dict = {i: 0 for i in range(size * size)}
-        available_queen_index = np.arange(0, size * size)
+        grid, queen_dict, available_queen_index = reset_grid(grid, size)
 
         while sum(queen_dict.values()) < size:
             grid, available_queen_index, queen_dict, size = add_queen(grid, available_queen_index, queen_dict, size)
@@ -25,15 +17,17 @@ def place_queens(grid, available_queen_index, queen_dict, size):
             if len(available_queen_index) == 0:
                 break
         else:
-            # If all queens are placed successfully, exit the loop
-            # print("All queens placed successfully!")
+            print("All queens placed successfully!")
             break
 
-    print("Final grid after placing queens:")
-    print(grid[QUEEN_STR])
-    print(grid)
-
     return grid
+
+
+def reset_grid(grid, size):
+    grid[QUEEN_STR] = 0
+    queen_dict = {i: 0 for i in range(size * size)}
+    available_queen_index = np.arange(0, size * size)
+    return grid, queen_dict, available_queen_index
 
 
 def add_queen(grid, available_queen_index, queen_dict, size):
@@ -53,12 +47,12 @@ def add_queen(grid, available_queen_index, queen_dict, size):
 
         if sum(queen_dict.values()) == size:
             return grid, available_queen_index, queen_dict, size
+        else:
+            return add_queen(grid, available_queen_index, queen_dict, size)
         
     else:
         return add_queen(grid, available_queen_index, queen_dict, size)
     
-    return grid, available_queen_index, queen_dict, size
-
 
 def get_index_coordinates(index, size):
     row = index // size
@@ -95,5 +89,7 @@ def is_valid_position(grid, row, col):
 
 
 if __name__ == '__main__':
-    grid = generate_grid(10)
-    # print(grid)
+    grid = Grid()
+    grid_with_queens = update_grid_with_queens(grid.grid)
+    print(grid_with_queens[QUEEN_STR])
+    print(grid_with_queens)
