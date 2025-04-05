@@ -12,9 +12,9 @@ class Grid:
             # 'U1' (a Unicode string of length 1).
             # 'i1' (a signed 8-bit integer).
 
-        self.setCustomGrid()
+        self.set_custom_grid()
 
-    def setCustomGrid(self):
+    def set_custom_grid(self):
         colors = np.array([
             ['R', 'R', 'R', 'G'],
             ['R', 'Y', 'Y', 'G'],
@@ -23,29 +23,29 @@ class Grid:
         ])
         self.grid[COLOR_STR] = colors
 
-    def resetGrid(self):
+    def reset_grid(self):
         self.grid[QUEEN_STR] = 0
         return "Grid reset successfully!"
 
-    def putQueen(self, x, y):
+    def put_queen(self, x, y):
         self.grid[x, y][QUEEN_STR] = 1
         validation_message = validate_grid(self.grid, x, y)
         return validation_message
 
-    def removeQueen(self, x, y):
+    def remove_queen(self, x, y):
         self.grid[x, y][QUEEN_STR] = 0
         validation_message = validate_grid(self.grid, x, y)
         return validation_message
     
-    def printGrid(self):
+    def print_grid(self):
         print(self.grid)
 
 
 if __name__ == '__main__':
     grid = Grid()
-    grid.printGrid()
-    print(grid.putQueen(0, 0))
-    grid.printGrid()
-    print(grid.putQueen(0, 1))
-    grid.printGrid()
+    grid.print_grid()
+    print(grid.put_queen(0, 0))
+    grid.print_grid()
+    print(grid.put_queen(0, 1))
+    grid.print_grid()
 
